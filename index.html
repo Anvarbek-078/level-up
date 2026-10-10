@@ -78,6 +78,7 @@ button.opt:hover{border-color:var(--p);background:var(--soft)}.opt.sel{border-co
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0}.chips span{background:#fff;border:1px solid #dcd6ff;color:var(--p);font-weight:700;font-size:13px;padding:6px 12px;border-radius:99px}.chips.dark span{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25);color:#fff}
 .tabs{display:flex;background:var(--soft);border-radius:12px;padding:4px;margin-bottom:26px}.tabs button{flex:1;border:0;background:transparent;border-radius:9px;padding:10px;font-weight:700;color:var(--mut)}.tabs button.on{background:#fff;color:var(--p);box-shadow:0 2px 8px -2px rgba(91,61,245,.3)}
 .hint a{color:var(--p);font-weight:700}
+.formhint{display:block;color:var(--mut);font-size:12px;margin:-11px 0 14px}
 .phead{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}.kpis.k4{grid-template-columns:repeat(4,1fr);margin:6px 0 20px}.btn.buy{background:#18c29c;box-shadow:0 6px 16px -6px rgba(24,194,156,.6)}.btn.buy:hover{background:#12a886}
 .weak{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0 0}.wchip{background:#fff1f2;border:1px solid #f8c9ce;color:var(--r);font-weight:600;font-size:14px;padding:6px 12px;border-radius:99px}.wchip i{font-style:normal;font-weight:800}
 .promo{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:18px;background:linear-gradient(90deg,#effcf8,#f4f1ff);border:1.5px solid #bfeedd;border-radius:16px;padding:18px 22px;flex-wrap:wrap}.promo b{display:block;font-size:18px}.promo span{color:var(--mut);font-size:14px}.promo em{font-style:normal;font-weight:800;color:var(--p)}
@@ -220,8 +221,8 @@ function viewLogin(mode){
  <div id="err" class="err" role="alert"></div><button class="btn big" type="button" id="lbtn">Kirish</button>`;
  const upForm=`<h2>Yangi hisob</h2><p class="sub">Bir daqiqada ro‘yxatdan o‘ting — 1-test bepul</p>
  <label>Ism familiya<input id="rn" placeholder="Ism Familiya" autocomplete="name"></label>
- <label>Login<input id="ru" placeholder="faqat lotin harf, raqam" autocomplete="username"></label>
- <label>Parol<input id="rp" type="password" placeholder="kamida 6 belgi" autocomplete="new-password"></label>
+ <label>Login<input id="ru" placeholder="Masalan: anvar_01" autocomplete="username"></label><small class="formhint">3–20 belgi: lotin harflari, raqam, nuqta yoki _</small>
+ <label>Parol<span class="pw"><input id="rp" type="password" placeholder="Kamida 6 belgi" autocomplete="new-password"><button type="button" id="reye" class="ghost sm">Ko‘rsat</button></span></label>
  <div id="err" class="err" role="alert"></div><button class="btn big" type="button" id="rbtn">Ro‘yxatdan o‘tish</button>`;
  root.innerHTML=`<div class="login">${left}<section class="lform"><div id="lf">${tabs}${mode==='in'?inForm:upForm}${foot}</div></section></div>`;
  document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>viewLogin(b.dataset.m));
@@ -237,6 +238,8 @@ function viewLogin(mode){
    err.textContent='';relock();me=x;ses.set(x.u);restoreUnlocked().then(()=>go('home'))};
   $('#lbtn').onclick=doLogin;enter(['#lu','#lp'],doLogin)}
  else{
+  $('#reye').onclick=()=>{const i=$('#rp');i.type=i.type==='password'?'text':'password';$('#reye').textContent=i.type==='password'?'Ko‘rsat':'Yashir'};
+  ['#rn','#ru','#rp'].forEach(selector=>$(selector).addEventListener('input',()=>{$('#err').textContent=''}));
   const doReg=()=>{const err=$('#err'),n=$('#rn').value.trim(),u=$('#ru').value.trim(),p=$('#rp').value;
    if(n.length<2){err.textContent='Ismingizni kiriting';return}
    if(!/^[A-Za-z0-9_.]{3,20}$/.test(u)){err.textContent='Login 3–20 ta lotin harf, raqam, nuqta yoki _ bo‘lsin';return}
